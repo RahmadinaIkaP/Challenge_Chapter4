@@ -95,7 +95,7 @@ class HomeFragment : Fragment(), NotesAdapter.NotesInterface {
             .setPositiveButton("Ya"){ _, _ ->
                 notesViewModel.deleteNote(notes)
             }
-            .setNegativeButton("No"){ dialog, _ ->
+            .setNegativeButton("Tidak"){ dialog, _ ->
                 dialog.dismiss()
             }
             .show()
