@@ -1,6 +1,8 @@
 package binar.academy.challenge_chapter4.ui.fragment.notes
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -32,6 +34,7 @@ class HomeFragment : Fragment(), NotesAdapter.NotesInterface {
     private lateinit var adapter : NotesAdapter
     private val notesViewModel : NotesViewModel by viewModels()
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var builder : AlertDialog.Builder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +48,7 @@ class HomeFragment : Fragment(), NotesAdapter.NotesInterface {
         super.onViewCreated(view, savedInstanceState)
 
         sharedPreferences = requireActivity().getSharedPreferences(USER, Context.MODE_PRIVATE)
+        builder = AlertDialog.Builder(context)
         setDataRv()
 
         binding.apply {
@@ -85,7 +89,16 @@ class HomeFragment : Fragment(), NotesAdapter.NotesInterface {
     }
 
     override fun deleteNote(notes: Notes) {
-        notesViewModel.deleteNote(notes)
+        builder.setTitle("Warning!")
+            .setMessage("Apakah kamu yakin ingin menghapus note ini?")
+            .setCancelable(true)
+            .setPositiveButton("Ya"){ _, _ ->
+                notesViewModel.deleteNote(notes)
+            }
+            .setNegativeButton("No"){ dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun logout() {
