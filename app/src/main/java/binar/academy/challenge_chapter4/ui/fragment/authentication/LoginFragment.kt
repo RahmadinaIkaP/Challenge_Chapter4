@@ -15,15 +15,18 @@ import binar.academy.challenge_chapter4.R
 import binar.academy.challenge_chapter4.data.model.User
 import binar.academy.challenge_chapter4.databinding.FragmentLoginBinding
 import binar.academy.challenge_chapter4.ui.Constant.Companion.EMAIL
+import binar.academy.challenge_chapter4.ui.Constant.Companion.NAMA
 import binar.academy.challenge_chapter4.ui.Constant.Companion.PASSWORD
 import binar.academy.challenge_chapter4.ui.Constant.Companion.USER
 import binar.academy.challenge_chapter4.ui.Constant.Companion.USER_SEDANG_LOGIN
+import binar.academy.challenge_chapter4.ui.viewmodel.AuthenticationViewModel
 
 class LoginFragment : Fragment() {
     private var _binding : FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var sharedPreferences: SharedPreferences
+    private val authenticationViewModel : AuthenticationViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,23 +59,25 @@ class LoginFragment : Fragment() {
             if (etEmailLogin.text!!.isEmpty() || etPassLogin.text!!.isEmpty()){
                 Toast.makeText(context, "Tidak boleh kosong!!", Toast.LENGTH_SHORT).show()
             }else{
-                if (sharedPreferences.getString(EMAIL, "") == email &&
-                    sharedPreferences.getString(PASSWORD, "") == password) {
-
-                    getSharedPreferences()
-                    Toast.makeText(context, "Login berhasil!", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-
-                } else{
-                    Toast.makeText(context, "Email/Password salah!!", Toast.LENGTH_SHORT).show()
+                authenticationViewModel.verifyUser(email, password).observe(viewLifecycleOwner){
+                    if (it == null){
+                        Toast.makeText(context, "Password/Email salah!", Toast.LENGTH_SHORT).show()
+                    }else{
+                        if (it.email == email && it.password == password){
+                            getSharedPreferences(it.username)
+                            Toast.makeText(context, "Login berhasil!", Toast.LENGTH_SHORT).show()
+                            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun getSharedPreferences(){
+    private fun getSharedPreferences(username : String){
         val editor = sharedPreferences.edit()
         editor.putBoolean(USER_SEDANG_LOGIN, true)
+        editor.putString(NAMA, username)
         editor.apply()
     }
 

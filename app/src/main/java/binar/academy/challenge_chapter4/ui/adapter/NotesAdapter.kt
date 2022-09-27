@@ -2,22 +2,22 @@ package binar.academy.challenge_chapter4.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import binar.academy.challenge_chapter4.databinding.ItemNotesBinding
 import binar.academy.challenge_chapter4.data.model.Notes
-import binar.academy.challenge_chapter4.ui.fragment.notes.HomeFragmentDirections
+import binar.academy.challenge_chapter4.data.model.UserAndNotes
 
 class NotesAdapter(private var onClick : NotesAdapter.NotesInterface) : RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
-    private var diffCallback = object : DiffUtil.ItemCallback<Notes>(){
-        override fun areItemsTheSame(oldItem: Notes, newItem: Notes): Boolean {
-            return oldItem.id_notes == newItem.id_notes
+    private var diffCallback = object : DiffUtil.ItemCallback<UserAndNotes>(){
+
+        override fun areItemsTheSame(oldItem: UserAndNotes, newItem: UserAndNotes): Boolean {
+            return oldItem.notes.id_notes == newItem.notes.id_notes
         }
 
-        override fun areContentsTheSame(oldItem: Notes, newItem: Notes): Boolean {
+        override fun areContentsTheSame(oldItem: UserAndNotes, newItem: UserAndNotes): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
 
@@ -27,16 +27,16 @@ class NotesAdapter(private var onClick : NotesAdapter.NotesInterface) : Recycler
 
     inner class ViewHolder (private val binding: ItemNotesBinding)
         : RecyclerView.ViewHolder(binding.root){
-            fun bind(notes: Notes){
+            fun bind(notes: UserAndNotes){
                 binding.apply {
-                    dataNotes = notes
+                    dataNotes = notes.notes
 
                     btnRvEdit.setOnClickListener {
-                        onClick.editNote(notes)
+                        onClick.editNote(notes.notes)
                     }
 
                     btnRvDelete.setOnClickListener {
-                        onClick.deleteNote(notes)
+                        onClick.deleteNote(notes.notes)
                     }
                 }
             }
@@ -58,7 +58,7 @@ class NotesAdapter(private var onClick : NotesAdapter.NotesInterface) : Recycler
 
     override fun getItemCount() = differ.currentList.size
 
-    fun setData(data : List<Notes>){
+    fun setData(data : List<UserAndNotes>){
         differ.submitList(data)
     }
 }

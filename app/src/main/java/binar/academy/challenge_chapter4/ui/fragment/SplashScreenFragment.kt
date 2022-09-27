@@ -1,5 +1,6 @@
 package binar.academy.challenge_chapter4.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -16,6 +17,7 @@ import binar.academy.challenge_chapter4.databinding.FragmentSplashScreenBinding
 import binar.academy.challenge_chapter4.ui.Constant.Companion.USER
 import binar.academy.challenge_chapter4.ui.Constant.Companion.USER_SEDANG_LOGIN
 
+@SuppressLint("CustomSplashScreen")
 class SplashScreenFragment : Fragment() {
     private var _binding : FragmentSplashScreenBinding? = null
     private val binding get() = _binding!!
@@ -25,7 +27,7 @@ class SplashScreenFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_splash_screen ,container, false)
         return binding.root
     }

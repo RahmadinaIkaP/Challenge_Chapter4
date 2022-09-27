@@ -45,7 +45,6 @@ class HomeFragment : Fragment(), NotesAdapter.NotesInterface {
         super.onViewCreated(view, savedInstanceState)
 
         sharedPreferences = requireActivity().getSharedPreferences(USER, Context.MODE_PRIVATE)
-        getSharedPreferencesText()
         setDataRv()
 
         binding.apply {
@@ -60,16 +59,13 @@ class HomeFragment : Fragment(), NotesAdapter.NotesInterface {
         }
     }
 
-    private fun getSharedPreferencesText(){
-        val editor = sharedPreferences.getString(NAMA, "")
-        binding.tvGreetUsername.text = "Welcome, $editor!"
-    }
-
     private fun setDataRv() {
         adapter = NotesAdapter(this)
+        val editor = sharedPreferences.getString(NAMA, "")
+        binding.tvGreetUsername.text = "Welcome, $editor!"
 
         binding.apply {
-            notesViewModel.getAllData.observe(viewLifecycleOwner) {
+            notesViewModel.getDataNotes(editor.toString()).observe(viewLifecycleOwner) {
                 adapter.setData(it)
 
                 if (it.isEmpty()){

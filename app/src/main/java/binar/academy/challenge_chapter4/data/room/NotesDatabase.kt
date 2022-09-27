@@ -7,11 +7,17 @@ import androidx.room.RoomDatabase
 import binar.academy.challenge_chapter4.data.room.dao.NoteDao
 import binar.academy.challenge_chapter4.data.model.Notes
 import binar.academy.challenge_chapter4.data.model.User
+import binar.academy.challenge_chapter4.data.model.UserAndNotes
+import binar.academy.challenge_chapter4.data.room.dao.UserDao
 
-@Database(entities = [Notes::class], version = 1)
+@Database( entities = [
+    User::class,
+    Notes::class],
+    version = 1 )
 abstract class NotesDatabase : RoomDatabase() {
 
     abstract fun noteDao() : NoteDao
+    abstract fun userDao() : UserDao
 
     companion object{
 
